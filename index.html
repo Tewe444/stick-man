@@ -93,13 +93,6 @@
             box-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
         }
 
-        #split-line {
-            position: absolute; left: 50%; top: 0; bottom: 0;
-            width: 4px; background: rgba(255,255,255,0.2);
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
-            pointer-events: none;
-        }
-
         .toast {
             animation: fadeInOut 3s forwards;
         }
@@ -108,12 +101,6 @@
             15% { opacity: 1; transform: translateY(0); }
             85% { opacity: 1; transform: translateY(0); }
             100% { opacity: 0; transform: translateY(-20px); }
-        }
-
-        .tool-btn-active {
-            border-color: #38bdf8 !important;
-            background-color: #0284c7 !important;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
         }
     </style>
 </head>
@@ -156,77 +143,6 @@
             </div>
         </div>
 
-        <!-- Overhauled Debug Menu -->
-        <div id="debug-menu" class="hidden absolute top-4 left-4 z-50 bg-slate-900/95 border-2 border-emerald-500 rounded-2xl p-4 text-white font-mono text-xs shadow-2xl interactive w-80 backdrop-blur-md max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-2 border-b border-slate-700 pb-2">
-                <span class="font-black text-emerald-400 text-sm flex items-center gap-1.5">🛠️ DEBUG & CHEAT MENÜ <span class="text-[10px] bg-slate-800 border border-slate-600 px-1 rounded text-slate-300">(P)</span></span>
-                <button onclick="toggleDebugMenu()" class="text-slate-400 hover:text-white font-bold px-1.5 py-0.5 rounded hover:bg-slate-800">✕</button>
-            </div>
-            <div class="space-y-2.5">
-                <div class="flex items-center justify-between bg-slate-950/60 p-2 rounded-xl border border-slate-800">
-                    <span class="text-slate-300 font-bold">Unsterblich (Godmode):</span>
-                    <button id="dbg-godmode-btn" onclick="toggleGodMode()" class="px-3 py-1 rounded-lg bg-red-800 hover:bg-red-700 font-extrabold text-[11px] border border-red-500/40">AUS</button>
-                </div>
-                <div class="flex items-center justify-between bg-slate-950/60 p-2 rounded-xl border border-slate-800">
-                    <span class="text-slate-300 font-bold">Münzen gewähren:</span>
-                    <button onclick="addDebugCoins(500)" class="px-2.5 py-1 rounded-lg bg-yellow-500 hover:bg-yellow-400 font-extrabold text-slate-950 text-[11px] border border-yellow-200">+500 🪙</button>
-                </div>
-                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800">
-                    <div class="flex justify-between text-slate-300 mb-1 font-bold">
-                        <span>Schwerkraft Multiplikator:</span>
-                        <b id="dbg-grav-val" class="text-emerald-400">1.0x</b>
-                    </div>
-                    <input type="range" min="0.1" max="2.5" step="0.1" value="1.0" oninput="setDebugGravity(this.value)" class="w-full accent-emerald-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
-                </div>
-                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800">
-                    <span class="block mb-1.5 font-extrabold text-yellow-400">Power-Up Spawner (P1):</span>
-                    <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-                        <button onclick="giveDebugPowerup('speed')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold">⚡ Speed</button>
-                        <button onclick="giveDebugPowerup('magnet')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold">🧲 Magnet</button>
-                        <button onclick="giveDebugPowerup('rocket')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold">🚀 Rakete</button>
-                        <button onclick="giveDebugPowerup('low_grav')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sky-300 font-bold">🪐 Low Grav</button>
-                        <button onclick="giveDebugPowerup('invert_grav')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-pink-300 font-bold">🌀 Anti-Grav</button>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                    <button onclick="openEditorMode()" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 font-extrabold text-white text-center border border-purple-400 shadow-md">✏️ EDITOR MODE</button>
-                    <button onclick="skipDebugLevel()" class="py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-extrabold text-white text-center border border-blue-400 shadow-md">🏁 LEVEL GEWINNEN</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Level Editor UI Toolbar -->
-        <div id="editor-ui" class="hidden absolute inset-0 pointer-events-none z-40 flex flex-col justify-between p-4">
-            <div class="interactive bg-slate-900/95 border-2 border-purple-500 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-2xl backdrop-blur-md">
-                <div class="flex items-center gap-2">
-                    <span class="font-black text-purple-400 text-sm tracking-wider uppercase">✏️ LEVEL EDITOR</span>
-                    <span id="editor-status-badge" class="text-xs px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">⚠️ UNGETESTET</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-1.5">
-                    <button id="tool-anchor" onclick="setEditorTool('anchor')" class="interactive px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-xs font-extrabold text-white tool-btn-active">⚓ Anchor</button>
-                    <button id="tool-platform" onclick="setEditorTool('platform')" class="interactive px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-xs font-extrabold text-sky-300">🟩 Platform</button>
-                    <button id="tool-jumppad" onclick="setEditorTool('jumppad')" class="interactive px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-xs font-extrabold text-green-400">🦘 Jump Pad (max 10)</button>
-                    <button id="tool-coin" onclick="setEditorTool('coin')" class="interactive px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-xs font-extrabold text-yellow-400">🪙 Coin (max 100)</button>
-                    <button id="tool-obstacle" onclick="setEditorTool('obstacle')" class="interactive px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-xs font-extrabold text-red-400">⚙️ Säge</button>
-                    <button id="tool-powerup" onclick="setEditorTool('powerup')" class="interactive px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-xs font-extrabold text-purple-300">⚡ Powerup (max 10)</button>
-                    <button id="tool-goal" onclick="setEditorTool('goal')" class="interactive px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-xs font-extrabold text-emerald-300">🏁 Goal</button>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="testCustomLevel()" class="interactive px-3 py-1.5 rounded-xl bg-green-600 hover:bg-green-500 text-white font-extrabold text-xs shadow-md border border-green-300">▶ TESTEN</button>
-                    <button id="save-level-btn" onclick="saveCustomLevel()" class="interactive px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-md border border-blue-300">💾 SPEICHERN</button>
-                    <button onclick="clearEditorLevel()" class="interactive px-3 py-1.5 rounded-xl bg-red-700 hover:bg-red-600 text-white font-extrabold text-xs border border-red-400">🗑️ LEEREN</button>
-                    <button onclick="showMainMenu()" class="interactive px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-extrabold text-xs border border-slate-600">BEENDEN</button>
-                </div>
-            </div>
-            
-            <div class="interactive flex justify-between items-center bg-slate-900/80 px-4 py-2 rounded-xl text-xs text-slate-300 font-bold border border-slate-800">
-                <span>Kamera bewegen: <b>Gedrückt Ziehen</b> oder <b>WASD / Pfeiltasten</b> | Rechtsklick = Löschen</span>
-                <span>Objektanzahl: <b id="editor-count-text" class="text-purple-400">0</b></span>
-            </div>
-        </div>
-
-        <div id="split-line" class="hidden"></div>
-
         <!-- Main Menu Overlay -->
         <div id="menu-overlay" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-between py-8 px-4 interactive z-20 overflow-y-auto">
             <div class="text-center mt-4">
@@ -244,9 +160,6 @@
                 </button>
                 <button onclick="playSound('btn'); showLevelSelect(2)" class="flex-1 min-w-[140px] py-4 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-black text-xl shadow-[0_0_20px_rgba(234,88,12,0.6)] hover:shadow-[0_0_30px_rgba(234,88,12,0.9)] transition transform hover:scale-105 active:scale-95 border-2 border-orange-300">
                     👥 2 SPIELER
-                </button>
-                <button onclick="playSound('btn'); openEditorMode()" class="w-full sm:w-auto px-6 py-4 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xl shadow-[0_0_20px_rgba(147,51,234,0.6)] hover:shadow-[0_0_30px_rgba(147,51,234,0.9)] transition transform hover:scale-105 active:scale-95 border-2 border-purple-300">
-                    ✏️ LEVEL EDITOR
                 </button>
             </div>
 
@@ -304,7 +217,7 @@
                     </div>
                     <div class="bg-slate-900 border-2 border-yellow-500/50 px-3 py-1.5 rounded-xl flex items-center gap-2">
                         <span class="text-yellow-400 text-lg">⭐</span>
-                        <span id="total-stars" class="text-white font-black text-lg">0 / 15</span>
+                        <span id="total-stars" class="text-white font-black text-lg">0 / 30</span>
                     </div>
                 </div>
             </div>
@@ -374,32 +287,8 @@
         let currentTrackIdx = 0;
         let musicTimer = null;
 
-        // Debug state
-        let isDebugOpen = false;
-        let isGodMode = false;
-        let debugGravityScale = 1.0;
-
         // Death delay state
         let deathTimer = null;
-
-        // Editor state & validation
-        let currentEditorTool = 'anchor';
-        let isCustomLevelVerified = false;
-        let isTestingCustomLevel = false;
-        let mouseX = 0, mouseY = 0;
-        let isPanningEditor = false;
-        let panStartX = 0, panStartY = 0;
-        let camStartX = 0, camStartY = 0;
-
-        let editorObjects = {
-            anchors: [],
-            platforms: [],
-            jumpPads: [],
-            coins: [],
-            obstacles: [],
-            powerups: [],
-            goalX: 1800
-        };
 
         function initAudio() {
             if (!audioCtx) {
@@ -604,21 +493,26 @@
             deathY: 550
         };
 
+        // Mehr vorgefertigte Level mit sehr niedriger Hindernis-Chance
         const gdLevels = [
-            { id: 1, name: "1. STEREO SWING", diff: "EASY", stars: 1, color: "#22c55e", bg: "NEON GRID", segments: 35, spacing: 320, platformChance: 0.45, powerupChance: 0.4, obstacleChance: 0.45, cost: 0 },
-            { id: 2, name: "2. HOOK ON TRACK", diff: "NORMAL", stars: 2, color: "#3b82f6", bg: "DEEP SPACE", segments: 50, spacing: 350, platformChance: 0.4, powerupChance: 0.5, obstacleChance: 0.6, cost: 20 },
-            { id: 3, name: "3. POLAR GRAPPLE", diff: "HARD", stars: 3, color: "#a855f7", bg: "RETRO SUNSET", segments: 65, spacing: 380, platformChance: 0.35, powerupChance: 0.55, obstacleChance: 0.7, cost: 50 },
-            { id: 4, name: "4. DRY COMBAT", diff: "INSANE", stars: 4, color: "#f97316", bg: "CYBER MATRIX", segments: 80, spacing: 410, platformChance: 0.3, powerupChance: 0.6, obstacleChance: 0.8, cost: 90 },
-            { id: 5, name: "5. DEMON ENDLESS", diff: "DEMON", stars: 5, color: "#ef4444", bg: "LAVA CAVERN", segments: 100, spacing: 440, platformChance: 0.25, powerupChance: 0.7, obstacleChance: 0.9, cost: 150 },
-            { id: 6, name: "6. CUSTOM EDITOR LEVEL", diff: "CUSTOM", stars: 5, color: "#a855f7", bg: "NEON GRID", segments: 0, spacing: 0, platformChance: 0, powerupChance: 0, obstacleChance: 0, cost: 0, isCustom: true }
+            { id: 1, name: "1. STEREO SWING", diff: "EASY", stars: 1, color: "#22c55e", bg: "NEON GRID", segments: 35, spacing: 320, platformChance: 0.5, powerupChance: 0.4, obstacleChance: 0.08, cost: 0 },
+            { id: 2, name: "2. HOOK ON TRACK", diff: "NORMAL", stars: 2, color: "#3b82f6", bg: "DEEP SPACE", segments: 45, spacing: 340, platformChance: 0.45, powerupChance: 0.45, obstacleChance: 0.12, cost: 100 },
+            { id: 3, name: "3. POLAR GRAPPLE", diff: "NORMAL", stars: 2, color: "#a855f7", bg: "RETRO SUNSET", segments: 55, spacing: 360, platformChance: 0.4, powerupChance: 0.5, obstacleChance: 0.15, cost: 200 },
+            { id: 4, name: "4. DRY COMBAT", diff: "HARD", stars: 3, color: "#f97316", bg: "CYBER MATRIX", segments: 65, spacing: 380, platformChance: 0.35, powerupChance: 0.55, obstacleChance: 0.18, cost: 400 },
+            { id: 5, name: "5. NEON FLIGHT", diff: "HARD", stars: 3, color: "#eab308", bg: "NEON GRID", segments: 75, spacing: 390, platformChance: 0.35, powerupChance: 0.6, obstacleChance: 0.2, cost: 800 },
+            { id: 6, name: "6. CYBER DRIFT", diff: "INSANE", stars: 4, color: "#ec4899", bg: "CYBER MATRIX", segments: 85, spacing: 400, platformChance: 0.3, powerupChance: 0.65, obstacleChance: 0.22, cost: 1000 },
+            { id: 7, name: "7. SUNSET RUSH", diff: "INSANE", stars: 4, color: "#10b981", bg: "RETRO SUNSET", segments: 95, spacing: 410, platformChance: 0.3, powerupChance: 0.7, obstacleChance: 0.25, cost: 1500 },
+            { id: 8, name: "8. ORBITAL FLYER", diff: "INSANE", stars: 4, color: "#06b6d4", bg: "DEEP SPACE", segments: 105, spacing: 420, platformChance: 0.28, powerupChance: 0.7, obstacleChance: 0.25, cost: 2000 },
+            { id: 9, name: "9. LAVA CAVERN", diff: "DEMON", stars: 5, color: "#ef4444", bg: "LAVA CAVERN", segments: 115, spacing: 430, platformChance: 0.25, powerupChance: 0.75, obstacleChance: 0.28, cost: 3500 },
+            { id: 10, name: "10. DEMON MASTER", diff: "DEMON", stars: 5, color: "#dc2626", bg: "LAVA CAVERN", segments: 130, spacing: 440, platformChance: 0.25, powerupChance: 0.8, obstacleChance: 0.3, cost: 5000 }
         ];
 
         let state = 'menu';
         let currentMode = 1;
         let selectedLevelIdx = 0;
         let totalCoins = parseInt(localStorage.getItem('grapple_coins') || '0');
-        let levelProgress = JSON.parse(localStorage.getItem('grapple_progress') || '[0,0,0,0,0,0]');
-        let unlockedLevels = JSON.parse(localStorage.getItem('grapple_unlocked') || '[true,false,false,false,false,true]');
+        let levelProgress = JSON.parse(localStorage.getItem('grapple_progress') || '[0,0,0,0,0,0,0,0,0,0]');
+        let unlockedLevels = JSON.parse(localStorage.getItem('grapple_unlocked') || '[true,false,false,false,false,false,false,false,false,false]');
 
         let players = [];
         let anchors = [];
@@ -636,8 +530,6 @@
         const uiHUD = document.getElementById('hud');
         const uiEnd = document.getElementById('end-overlay');
         const uiHudP2 = document.getElementById('hud-p2');
-        const uiSplitLine = document.getElementById('split-line');
-        const uiEditor = document.getElementById('editor-ui');
 
         function saveProgress() {
             localStorage.setItem('grapple_coins', totalCoins);
@@ -756,6 +648,7 @@
 
             document.getElementById('total-coins-display').innerText = totalCoins;
             let starsEarned = levelProgress.reduce((acc, p) => acc + (p >= 100 ? 1 : 0), 0);
+            let totalPossibleStars = gdLevels.reduce((acc, l) => acc + l.stars, 0);
             document.getElementById('total-stars').innerText = `${starsEarned} / ${gdLevels.length}`;
         }
 
@@ -781,8 +674,6 @@
             uiLevel.classList.add('hidden');
             uiHUD.classList.add('hidden');
             uiEnd.classList.add('hidden');
-            uiSplitLine.classList.add('hidden');
-            uiEditor.classList.add('hidden');
         }
 
         function showLevelSelect(mode = 1) {
@@ -794,7 +685,6 @@
             uiLevel.classList.remove('hidden');
             uiHUD.classList.add('hidden');
             uiEnd.classList.add('hidden');
-            uiEditor.classList.add('hidden');
             updateLevelCardUI();
         }
 
@@ -811,11 +701,6 @@
             coins = [];
             obstacles = [];
             particles = [];
-
-            if (levelData.isCustom) {
-                loadCustomLevelData();
-                return;
-            }
 
             let currentX = 200;
             let currentY = -120;
@@ -843,7 +728,6 @@
                     let plat = { x: platX, y: platY, w: platW, h: 26 };
                     platforms.push(plat);
 
-                    // Chance to spawn a Jump Pad on platform
                     if (Math.random() < 0.35) {
                         jumpPads.push({
                             x: plat.x + plat.w * 0.5 - 25,
@@ -875,11 +759,11 @@
                     }
                 }
 
-                // Hazards along path
-                if (Math.random() < (levelData.obstacleChance || 0.5)) {
+                // Stark reduzierte Hindernis-Spawn-Chance
+                if (Math.random() < (levelData.obstacleChance || 0.1)) {
                     let obsX = currentX - levelData.spacing * 0.45;
                     let obsY = currentY + (Math.random() - 0.5) * 200 + 40;
-                    let isMoving = Math.random() < 0.6;
+                    let isMoving = Math.random() < 0.5;
                     obstacles.push({
                         x: obsX,
                         y: obsY,
@@ -909,239 +793,12 @@
             levelEndX = currentX + 350;
         }
 
-        // ================= EDITOR MODE LOGIC =================
-        function openEditorMode() {
-            state = 'editor';
-            deathTimer = null;
-            isTestingCustomLevel = false;
-            uiMenu.classList.add('hidden');
-            uiLevel.classList.add('hidden');
-            uiEnd.classList.add('hidden');
-            uiHUD.classList.add('hidden');
-            uiEditor.classList.remove('hidden');
-
-            loadCustomLevelData();
-            camera.x = -200;
-            camera.y = -200;
-            updateEditorStatusUI();
-            showToast("✏️ LEVEL EDITOR GESTARTET!");
-        }
-
-        function setEditorTool(tool) {
-            currentEditorTool = tool;
-            document.querySelectorAll('[id^="tool-"]').forEach(btn => btn.classList.remove('tool-btn-active'));
-            const btn = document.getElementById(`tool-${tool}`);
-            if (btn) btn.classList.add('tool-btn-active');
-        }
-
-        function updateEditorCount() {
-            let cnt = editorObjects.anchors.length + editorObjects.platforms.length + 
-                      editorObjects.jumpPads.length + editorObjects.coins.length + 
-                      editorObjects.obstacles.length + editorObjects.powerups.length;
-            document.getElementById('editor-count-text').innerText = cnt;
-        }
-
-        function invalidateCustomLevel() {
-            isCustomLevelVerified = false;
-            updateEditorStatusUI();
-        }
-
-        function updateEditorStatusUI() {
-            const badge = document.getElementById('editor-status-badge');
-            if (badge) {
-                if (isCustomLevelVerified) {
-                    badge.innerText = "✅ VERIFIZIERT";
-                    badge.className = "text-xs px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
-                } else {
-                    badge.innerText = "⚠️ UNGETESTET";
-                    badge.className = "text-xs px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40";
-                }
-            }
-        }
-
-        function saveCustomLevel() {
-            if (!isCustomLevelVerified) {
-                playSound('death');
-                showToast("⚠️ Du musst das Level erst im Test-Modus gewinnen, bevor du speichern kannst!");
-                return;
-            }
-            localStorage.setItem('grapple_custom_level', JSON.stringify(editorObjects));
-            localStorage.setItem('grapple_custom_verified', 'true');
-            playSound('powerup');
-            showToast("💾 LEVEL ERFOLGREICH GESPEICHERT!");
-        }
-
-        function syncEditorToGameData() {
-            anchors = JSON.parse(JSON.stringify(editorObjects.anchors));
-            platforms = JSON.parse(JSON.stringify(editorObjects.platforms));
-            jumpPads = JSON.parse(JSON.stringify(editorObjects.jumpPads || []));
-            coins = JSON.parse(JSON.stringify(editorObjects.coins));
-            obstacles = JSON.parse(JSON.stringify(editorObjects.obstacles));
-            powerups = JSON.parse(JSON.stringify(editorObjects.powerups));
-            levelEndX = editorObjects.goalX || 1200;
-        }
-
-        function loadCustomLevelData() {
-            let saved = localStorage.getItem('grapple_custom_level');
-            isCustomLevelVerified = localStorage.getItem('grapple_custom_verified') === 'true';
-
-            if (saved) {
-                try {
-                    editorObjects = JSON.parse(saved);
-                } catch(e) {}
-            }
-            if (!editorObjects.anchors.length && !editorObjects.platforms.length) {
-                editorObjects = {
-                    anchors: [{ x: 0, y: -200 }, { x: 350, y: -180 }, { x: 750, y: -220 }],
-                    platforms: [{ x: -300, y: 100, w: 500, h: 30 }, { x: 300, y: 150, w: 200, h: 26 }],
-                    jumpPads: [{ x: -50, y: 86, w: 50, h: 14, bounceForce: 21 }],
-                    coins: [{ x: 350, y: -50, r: 22, collected: false }],
-                    obstacles: [{ x: 550, y: -50, originY: -50, r: 22, speed: 0.04, range: 60, angle: 0, type: 'saw' }],
-                    powerups: [{ x: 380, y: 120, type: 'speed', r: 16, collected: false }],
-                    goalX: 1200
-                };
-            }
-
-            syncEditorToGameData();
-            updateEditorCount();
-            updateEditorStatusUI();
-        }
-
-        function clearEditorLevel() {
-            editorObjects = {
-                anchors: [{ x: 0, y: -200 }],
-                platforms: [{ x: -300, y: 100, w: 400, h: 30 }],
-                jumpPads: [],
-                coins: [],
-                obstacles: [],
-                powerups: [],
-                goalX: 1200
-            };
-            invalidateCustomLevel();
-            syncEditorToGameData();
-            updateEditorCount();
-            showToast("🗑️️ Editor geleert!");
-        }
-
-        function testCustomLevel() {
-            isTestingCustomLevel = true;
-            selectedLevelIdx = 5; // Custom level index
-            startSelectedLevel();
-        }
-
-        // Editor Mouse Pan & Placement Listeners
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            if (state === 'editor' && isPanningEditor) {
-                camera.x = camStartX - (mouseX - panStartX);
-                camera.y = camStartY - (mouseY - panStartY);
-            }
-        });
-
-        window.addEventListener('mousedown', (e) => {
-            if (state !== 'editor') return;
-            if (e.target.closest('.interactive')) return;
-
-            if (e.button === 1 || e.shiftKey) { // Middle click or Shift + Left click to pan
-                isPanningEditor = true;
-                panStartX = e.clientX;
-                panStartY = e.clientY;
-                camStartX = camera.x;
-                camStartY = camera.y;
-                return;
-            }
-
-            if (e.button === 0) { // Left click placement
-                let worldX = e.clientX + camera.x;
-                let worldY = e.clientY + camera.y;
-
-                if (currentEditorTool === 'anchor') {
-                    editorObjects.anchors.push({ x: worldX, y: worldY });
-                    invalidateCustomLevel();
-                } else if (currentEditorTool === 'platform') {
-                    editorObjects.platforms.push({ x: worldX - 80, y: worldY - 12, w: 160, h: 26 });
-                    invalidateCustomLevel();
-                } else if (currentEditorTool === 'jumppad') {
-                    if ((editorObjects.jumpPads || []).length >= 10) {
-                        playSound('death');
-                        showToast("⚠️ Maximum 10 Jump-Pads erlaubt!");
-                        return;
-                    }
-                    if (!editorObjects.jumpPads) editorObjects.jumpPads = [];
-                    editorObjects.jumpPads.push({ x: worldX - 25, y: worldY - 7, w: 50, h: 14, bounceForce: 21 });
-                    invalidateCustomLevel();
-                } else if (currentEditorTool === 'coin') {
-                    if ((editorObjects.coins || []).length >= 100) {
-                        playSound('death');
-                        showToast("⚠️ Maximum 100 Münzen erlaubt!");
-                        return;
-                    }
-                    editorObjects.coins.push({ x: worldX, y: worldY, r: 22, collected: false });
-                    invalidateCustomLevel();
-                } else if (currentEditorTool === 'obstacle') {
-                    editorObjects.obstacles.push({ x: worldX, y: worldY, originY: worldY, r: 22, speed: 0.04, range: 60, angle: 0, type: 'saw' });
-                    invalidateCustomLevel();
-                } else if (currentEditorTool === 'powerup') {
-                    if ((editorObjects.powerups || []).length >= 10) {
-                        playSound('death');
-                        showToast("⚠️ Maximum 10 Power-Ups erlaubt!");
-                        return;
-                    }
-                    const types = ['speed', 'magnet', 'rocket', 'low_grav', 'invert_grav'];
-                    let t = types[Math.floor(Math.random() * types.length)];
-                    editorObjects.powerups.push({ x: worldX, y: worldY, type: t, r: 16, collected: false });
-                    invalidateCustomLevel();
-                } else if (currentEditorTool === 'goal') {
-                    editorObjects.goalX = worldX;
-                    invalidateCustomLevel();
-                }
-
-                syncEditorToGameData();
-                updateEditorCount();
-                playSound('btn');
-            }
-        });
-
-        window.addEventListener('mouseup', (e) => {
-            if (state === 'editor') {
-                isPanningEditor = false;
-            }
-        });
-
-        window.addEventListener('contextmenu', (e) => {
-            if (state === 'editor') {
-                e.preventDefault();
-                let worldX = e.clientX + camera.x;
-                let worldY = e.clientY + camera.y;
-
-                let threshold = 40;
-                let initLen = editorObjects.anchors.length + editorObjects.coins.length + editorObjects.obstacles.length + editorObjects.powerups.length + editorObjects.platforms.length;
-
-                editorObjects.anchors = editorObjects.anchors.filter(a => Math.hypot(a.x - worldX, a.y - worldY) > threshold);
-                editorObjects.coins = editorObjects.coins.filter(c => Math.hypot(c.x - worldX, c.y - worldY) > threshold);
-                editorObjects.obstacles = editorObjects.obstacles.filter(o => Math.hypot(o.x - worldX, o.y - worldY) > threshold);
-                editorObjects.powerups = editorObjects.powerups.filter(p => Math.hypot(p.x - worldX, p.y - worldY) > threshold);
-                editorObjects.platforms = editorObjects.platforms.filter(p => Math.hypot(p.x + p.w/2 - worldX, p.y + p.h/2 - worldY) > 80);
-                if (editorObjects.jumpPads) {
-                    editorObjects.jumpPads = editorObjects.jumpPads.filter(j => Math.hypot(j.x + j.w/2 - worldX, j.y + j.h/2 - worldY) > 40);
-                }
-
-                invalidateCustomLevel();
-                syncEditorToGameData();
-                updateEditorCount();
-                playSound('cut');
-            }
-        });
-
         function startSelectedLevel() {
             state = 'playing';
             deathTimer = null;
             uiMenu.classList.add('hidden');
             uiLevel.classList.add('hidden');
             uiEnd.classList.add('hidden');
-            uiEditor.classList.add('hidden');
             uiHUD.classList.remove('hidden');
 
             const currentLevel = gdLevels[selectedLevelIdx];
@@ -1158,7 +815,6 @@
 
             if (currentMode === 2) {
                 uiHudP2.classList.remove('hidden');
-                uiSplitLine.classList.remove('hidden');
                 players.push({
                     id: 2, x: -60, y: -25, vx: 5, vy: 0, r: config.playerRadius,
                     color: '#f97316', isSwinging: false, activeAnchor: null, ropeLength: 0,
@@ -1167,7 +823,6 @@
                 });
             } else {
                 uiHudP2.classList.add('hidden');
-                uiSplitLine.classList.add('hidden');
             }
 
             camera.x = players[0].x - canvas.width * 0.35;
@@ -1177,7 +832,6 @@
         function updatePhysics() {
             if (state !== 'playing') return;
 
-            // Move animated obstacles
             obstacles.forEach(obs => {
                 if (obs.speed > 0) {
                     obs.angle += obs.speed;
@@ -1207,9 +861,8 @@
             players.forEach(p => {
                 if (p.dead) return;
 
-                // Check hazard collisions
                 obstacles.forEach(obs => {
-                    if (!p.dead && !isGodMode && Math.hypot(obs.x - p.x, obs.y - p.y) < p.r + obs.r) {
+                    if (!p.dead && Math.hypot(obs.x - p.x, obs.y - p.y) < p.r + obs.r) {
                         p.dead = true;
                         triggerDeathExplosion(p);
                     }
@@ -1220,7 +873,6 @@
                 if (p.lowGravTimer > 0) p.lowGravTimer--;
                 if (p.invertGravTimer > 0) p.invertGravTimer--;
 
-                // Update Buff indicators in HUD
                 const buffContainer = document.getElementById(`p${p.id}-buffs`);
                 if (buffContainer) {
                     let buffs = [];
@@ -1233,8 +885,7 @@
 
                 let speedMultiplier = p.speedTimer > 0 ? 1.5 : 1.0;
 
-                // Determine active gravity force
-                let activeGravity = config.gravity * debugGravityScale;
+                let activeGravity = config.gravity;
                 if (p.invertGravTimer > 0) {
                     activeGravity = -config.gravity * 0.5;
                 } else if (p.lowGravTimer > 0) {
@@ -1273,7 +924,6 @@
 
                     p.grounded = false;
                     
-                    // Platform collision
                     platforms.forEach(plat => {
                         if (p.x + p.r > plat.x && p.x - p.r < plat.x + plat.w) {
                             if (p.y + p.r >= plat.y && p.y - p.r < plat.y + plat.h && p.vy > 0) {
@@ -1286,7 +936,6 @@
                         }
                     });
 
-                    // Jump Pad collision
                     jumpPads.forEach(jp => {
                         if (p.x + p.r > jp.x && p.x - p.r < jp.x + jp.w) {
                             if (p.y + p.r >= jp.y && p.y - p.r < jp.y + jp.h && p.vy >= 0) {
@@ -1364,8 +1013,7 @@
                     }
                 });
 
-                // Void / Lava death check
-                if (p.y > config.deathY && !p.dead && !isGodMode) {
+                if (p.y > config.deathY && !p.dead) {
                     p.dead = true;
                     triggerDeathExplosion(p);
                 }
@@ -1399,18 +1047,12 @@
                 saveProgress();
                 playSound('win');
 
-                if (isTestingCustomLevel && selectedLevelIdx === 5) {
-                    isCustomLevelVerified = true;
-                    showToast("🎉 LEVEL VERIFIZIERT! Du kannst es jetzt speichern.");
-                }
-
                 document.getElementById('end-title').innerText = `SPIELER ${winner.id} GEWINNT!`;
                 document.getElementById('end-sub').innerText = `Level ${gdLevels[selectedLevelIdx].name} erfolgreich absolviert!`;
                 uiEnd.classList.remove('hidden');
                 uiEnd.classList.add('flex');
                 state = 'end';
             } else if (players.every(p => p.dead)) {
-                // Wait 1 second (1000ms) with explosion animation before opening Game Over screen
                 if (!deathTimer) {
                     deathTimer = setTimeout(() => {
                         if (pct > levelProgress[selectedLevelIdx]) {
@@ -1481,7 +1123,6 @@
             ctx.save();
             ctx.translate(-camera.x, -camera.y);
 
-            // Finish Goal Flag Line
             let checkW = 30;
             for (let y = -1500; y < 1500; y += checkW) {
                 for (let x = 0; x < 2; x++) {
@@ -1493,7 +1134,6 @@
             ctx.font = '900 36px sans-serif';
             ctx.fillText("ZIEL", levelEndX - 20, -100);
 
-            // Red death zone area under deathY
             ctx.save();
             let lavaGrad = ctx.createLinearGradient(0, config.deathY, 0, config.deathY + 800);
             lavaGrad.addColorStop(0, 'rgba(239, 68, 68, 0.85)');
@@ -1502,7 +1142,6 @@
             ctx.fillStyle = lavaGrad;
             ctx.fillRect(camera.x - 1000, config.deathY, canvas.width + 2000, 2500);
 
-            // Glowing red hazard boundary line
             ctx.strokeStyle = '#f87171';
             ctx.lineWidth = 6;
             ctx.shadowColor = '#ef4444';
@@ -1544,7 +1183,6 @@
                 ctx.stroke();
             });
 
-            // Draw Jump Pads
             jumpPads.forEach(jp => {
                 ctx.save();
                 ctx.fillStyle = '#16a34a';
@@ -1557,7 +1195,6 @@
                 ctx.fill();
                 ctx.stroke();
 
-                // Spring detail lines
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
@@ -1568,7 +1205,6 @@
                 ctx.restore();
             });
 
-            // Draw obstacles & saws
             obstacles.forEach(obs => {
                 ctx.save();
                 ctx.translate(obs.x, obs.y);
@@ -1699,51 +1335,6 @@
                 ctx.restore();
             });
 
-            // Level Editor Placement Preview Cursor
-            if (state === 'editor') {
-                let mWorldX = mouseX + camera.x;
-                let mWorldY = mouseY + camera.y;
-
-                ctx.save();
-                ctx.globalAlpha = 0.55;
-
-                if (currentEditorTool === 'anchor') {
-                    ctx.beginPath();
-                    ctx.arc(mWorldX, mWorldY, 11, 0, Math.PI * 2);
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fill();
-                } else if (currentEditorTool === 'platform') {
-                    ctx.fillStyle = '#38bdf8';
-                    ctx.fillRect(mWorldX - 80, mWorldY - 12, 160, 26);
-                } else if (currentEditorTool === 'jumppad') {
-                    ctx.fillStyle = '#22c55e';
-                    ctx.fillRect(mWorldX - 25, mWorldY - 7, 50, 14);
-                } else if (currentEditorTool === 'coin') {
-                    ctx.fillStyle = '#eab308';
-                    ctx.beginPath();
-                    ctx.arc(mWorldX, mWorldY, 22, 0, Math.PI * 2);
-                    ctx.fill();
-                } else if (currentEditorTool === 'obstacle') {
-                    ctx.fillStyle = '#ef4444';
-                    ctx.beginPath();
-                    ctx.arc(mWorldX, mWorldY, 22, 0, Math.PI * 2);
-                    ctx.fill();
-                } else if (currentEditorTool === 'powerup') {
-                    ctx.fillStyle = '#a855f7';
-                    ctx.beginPath();
-                    ctx.arc(mWorldX, mWorldY, 16, 0, Math.PI * 2);
-                    ctx.fill();
-                } else if (currentEditorTool === 'goal') {
-                    ctx.strokeStyle = '#10b981';
-                    ctx.lineWidth = 4;
-                    ctx.beginPath();
-                    ctx.moveTo(mWorldX, -1000);
-                    ctx.lineTo(mWorldX, 1000);
-                    ctx.stroke();
-                }
-                ctx.restore();
-            }
-
             ctx.restore();
         }
 
@@ -1773,10 +1364,6 @@
             if (e.repeat) return;
             initAudio();
 
-            if (e.code === 'KeyP') {
-                toggleDebugMenu();
-            }
-
             if (e.code === 'Space' || e.code === 'KeyW') {
                 attachGrapple(0);
             }
@@ -1791,56 +1378,6 @@
                 if (e.code === 'Space' || e.code === 'Enter') startSelectedLevel();
             }
         });
-
-        // Debug Menu Functions
-        function toggleDebugMenu() {
-            isDebugOpen = !isDebugOpen;
-            const dbg = document.getElementById('debug-menu');
-            if (dbg) {
-                if (isDebugOpen) dbg.classList.remove('hidden');
-                else dbg.classList.add('hidden');
-            }
-        }
-
-        function toggleGodMode() {
-            isGodMode = !isGodMode;
-            const btn = document.getElementById('dbg-godmode-btn');
-            if (btn) {
-                btn.innerText = isGodMode ? "AN" : "AUS";
-                btn.className = isGodMode ? "px-3 py-1 rounded-lg bg-green-600 hover:bg-green-500 font-extrabold text-[11px] border border-green-300" : "px-3 py-1 rounded-lg bg-red-800 hover:bg-red-700 font-extrabold text-[11px] border border-red-500/40";
-            }
-            showToast(isGodMode ? "🛡️ GODMODE AKTIV!" : "🛡️ Godmode Deaktiviert");
-        }
-
-        function addDebugCoins(amount) {
-            totalCoins += amount;
-            saveProgress();
-            document.getElementById('hud-coins').innerText = `🪙 ${totalCoins}`;
-            playSound('coin');
-            showToast(`+${amount} 🪙 HINZUGEFÜGT!`);
-        }
-
-        function setDebugGravity(val) {
-            debugGravityScale = parseFloat(val);
-            document.getElementById('dbg-grav-val').innerText = `${debugGravityScale.toFixed(1)}x`;
-        }
-
-        function giveDebugPowerup(type) {
-            if (state !== 'playing' || !players[0]) return;
-            const p = players[0];
-            if (type === 'speed') p.speedTimer = 300;
-            else if (type === 'magnet') p.magnetTimer = 400;
-            else if (type === 'rocket') { p.vy = -18; p.vx = 18; }
-            else if (type === 'low_grav') { p.lowGravTimer = 350; p.invertGravTimer = 0; }
-            else if (type === 'invert_grav') { p.invertGravTimer = 300; p.lowGravTimer = 0; }
-            playSound('powerup');
-            showToast(`Debug Powerup (${type}) aktiviert!`);
-        }
-
-        function skipDebugLevel() {
-            if (state !== 'playing' || !players[0]) return;
-            players[0].x = levelEndX + 10;
-        }
 
         window.addEventListener('keyup', (e) => {
             keysDown[e.code] = false;
@@ -1879,15 +1416,8 @@
         });
 
         function gameLoop() {
-            if (state === 'editor') {
-                if (keysDown['KeyA'] || keysDown['ArrowLeft']) camera.x -= 12;
-                if (keysDown['KeyD'] || keysDown['ArrowRight']) camera.x += 12;
-                if (keysDown['KeyW'] || keysDown['ArrowUp']) camera.y -= 12;
-                if (keysDown['KeyS'] || keysDown['ArrowDown']) camera.y += 12;
-            } else {
-                updateGamepad();
-                updatePhysics();
-            }
+            updateGamepad();
+            updatePhysics();
             draw();
             requestAnimationFrame(gameLoop);
         }
